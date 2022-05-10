@@ -4,4 +4,4 @@ test:
 # 编译proto生成pb.go文件
 gen:
 	rm -rf rpc/*
-	protoc --go-grpc_out=./rpc ./proto/*/*.proto
+	protoc --go_out=./rpc --go-grpc_out=./rpc ./proto/*/*.proto

@@ -4,13 +4,13 @@ package sample;
 option go_package = "/sample";
 
 service SampleService {
-rpc Search(SearchRequest) returns (SearchResponse) {}
+    rpc Search(SearchRequest) returns (SearchResponse) {}
 }
 
 message SearchRequest {
-string request = 1;
+    string request = 1;
 }
 
 message SearchResponse {
-string response = 1;
+    string response = 1;
 }
