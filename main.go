@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 
+	_ "eFramework/consul" // grpc使用consul做服务发现init
 	"eFramework/rpc/sample"
 
 	"google.golang.org/grpc"
