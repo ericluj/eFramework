@@ -27,7 +27,7 @@ func RegitserService(s *ConsulService) {
 	}
 
 	agent := client.Agent()
-	interval := 10 * time.Second
+	interval := 1 * time.Second
 	deregister := 1 * time.Minute
 
 	reg := &api.AgentServiceRegistration{

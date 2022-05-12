@@ -3,6 +3,7 @@ package consul
 import (
 	"context"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/hashicorp/consul/api"
@@ -11,7 +12,7 @@ import (
 
 const scheme = "consul"
 
-func init() {
+func Init() {
 	resolver.Register(&consulBuilder{})
 }
 
@@ -22,16 +23,14 @@ type consulBuilder struct {
 
 func (cb *consulBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
 
-	cfg := &api.Config{}
-	cfg.Address = ""
-	cfg.HttpAuth.Username = ""
-	cfg.HttpAuth.Password = ""
-
 	ctx, cancel := context.WithCancel(context.Background())
 	cr := &consulResolver{
 		ctx:       ctx,
 		cancel:    cancel,
 		lastIndex: 0,
+		address:   target.URL.Host,
+		name:      strings.Trim(target.URL.Path, "/"),
+		cc:        cc,
 	}
 
 	cr.wg.Add(1)
