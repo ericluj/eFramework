@@ -1,4 +1,4 @@
-package resolver
+package consul
 
 import (
 	"context"
