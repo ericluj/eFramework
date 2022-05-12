@@ -66,7 +66,8 @@ func initHttpServer(ln net.Listener) {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "ok")
+	w.WriteHeader(200)
+	w.Write([]byte("ok"))
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
