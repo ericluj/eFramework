@@ -6,8 +6,7 @@ import (
 	"net"
 	"net/http"
 
-	"eFramework/consul"
-	_ "eFramework/consul" // grpc使用consul做服务发现init
+	"eFramework/consul" // grpc使用consul做服务发现init
 	"eFramework/rpc/sample"
 
 	"google.golang.org/grpc"
@@ -27,7 +26,7 @@ func main() {
 	}
 
 	// http server
-	go initHttpServer(ln)
+	go initHttpServer()
 
 	// rpc server
 	go initGrpcServer(ln)
@@ -58,15 +57,17 @@ func initGrpcServer(ln net.Listener) {
 	server.Serve(ln)
 }
 
-func initHttpServer(ln net.Listener) {
+func initHttpServer() {
+	ln, err := listen(8001)
+	if err != nil {
+		panic(err)
+	}
 	mux := http.NewServeMux()
 	mux.Handle("/health", http.HandlerFunc(healthHandler))
-	mux.Handle("/search", http.HandlerFunc(searchHandler))
 	http.Serve(ln, mux)
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
 	w.Write([]byte("ok"))
 }
 

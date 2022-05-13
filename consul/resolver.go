@@ -12,7 +12,7 @@ import (
 
 const scheme = "consul"
 
-func Init() {
+func init() {
 	resolver.Register(&consulBuilder{})
 }
 
