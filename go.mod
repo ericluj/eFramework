@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/hashicorp/consul/api v1.12.0
+	github.com/soheilhy/cmux v0.1.5
 	google.golang.org/grpc v1.46.0
 	google.golang.org/protobuf v1.27.1
 )

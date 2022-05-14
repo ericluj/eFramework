@@ -9,6 +9,7 @@ import (
 	"eFramework/consul" // grpc使用consul做服务发现init
 	"eFramework/rpc/sample"
 
+	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 )
 
@@ -25,11 +26,20 @@ func main() {
 		panic(err)
 	}
 
-	// http server
-	go initHttpServer()
+	// TODO: 后面cmux可以自己封装学习一下
+	m := cmux.New(ln)
+	grpcLn := m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
+	httpLn := m.Match(cmux.Any()) // 除了grpc的剩下都当作http使用
 
 	// rpc server
-	go initGrpcServer(ln)
+	go initGrpcServer(grpcLn)
+
+	// http server
+	go initHttpServer(httpLn)
+
+	if err := m.Serve(); err != nil {
+		panic(err)
+	}
 
 	select {}
 }
@@ -57,11 +67,7 @@ func initGrpcServer(ln net.Listener) {
 	server.Serve(ln)
 }
 
-func initHttpServer() {
-	ln, err := listen(8001)
-	if err != nil {
-		panic(err)
-	}
+func initHttpServer(ln net.Listener) {
 	mux := http.NewServeMux()
 	mux.Handle("/health", http.HandlerFunc(healthHandler))
 	http.Serve(ln, mux)
@@ -69,11 +75,6 @@ func initHttpServer() {
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
-}
-
-func searchHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("http search")
-	fmt.Fprintf(w, "http search")
 }
 
 type SampleService struct {
