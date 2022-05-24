@@ -9,8 +9,9 @@ import (
 	"eFramework/consul" // grpc使用consul做服务发现init
 	"eFramework/rpc/sample"
 
-	"github.com/soheilhy/cmux"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -26,20 +27,11 @@ func main() {
 		panic(err)
 	}
 
-	// TODO: 后面cmux可以自己封装学习一下
-	m := cmux.New(ln)
-	grpcLn := m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
-	httpLn := m.Match(cmux.Any()) // 除了grpc的剩下都当作http使用
+	// http server
+	go initHttpServer()
 
 	// rpc server
-	go initGrpcServer(grpcLn)
-
-	// http server
-	go initHttpServer(httpLn)
-
-	if err := m.Serve(); err != nil {
-		panic(err)
-	}
+	go initGrpcServer(ln)
 
 	select {}
 }
@@ -67,18 +59,26 @@ func initGrpcServer(ln net.Listener) {
 	server.Serve(ln)
 }
 
-func initHttpServer(ln net.Listener) {
-	mux := http.NewServeMux()
-	mux.Handle("/health", http.HandlerFunc(healthHandler))
-	http.Serve(ln, mux)
-}
+func initHttpServer() {
+	mux := runtime.NewServeMux()
+	grpcServerEndpoint := fmt.Sprintf("localhost:%d", port)
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	err := sample.RegisterSampleServiceHandlerFromEndpoint(context.Background(), mux, grpcServerEndpoint, opts)
+	if err != nil {
+		fmt.Printf("http server error: %v", err)
+		return
+	}
 
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("ok"))
+	http.ListenAndServe(":8001", mux)
 }
 
 type SampleService struct {
 	sample.UnimplementedSampleServiceServer
+}
+
+func (s *SampleService) Health(ctx context.Context, in *sample.HealthRequest) (*sample.HealthResponse, error) {
+	fmt.Println("grpc health")
+	return &sample.HealthResponse{Status: "ok"}, nil
 }
 
 func (s *SampleService) Search(ctx context.Context, in *sample.SearchRequest) (*sample.SearchResponse, error) {
