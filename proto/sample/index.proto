@@ -3,8 +3,27 @@ syntax = "proto3";
 package sample;
 option go_package = "/sample";
 
+import "google/api/annotations.proto";
+
 service SampleService {
-    rpc Search(SearchRequest) returns (SearchResponse) {}
+    rpc Health(HealthRequest) returns (HealthResponse) {
+        option (google.api.http) = {
+            get: "/health"
+        };
+    }
+    rpc Search(SearchRequest) returns (SearchResponse) {
+        option (google.api.http) = {
+            post: "/search"
+            body: "*"
+        };
+    }
+}
+
+message HealthRequest {
+}
+
+message HealthResponse {
+    string status = 1;
 }
 
 message SearchRequest {

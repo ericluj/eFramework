@@ -37,9 +37,9 @@ func RegitserService(s *ConsulService) {
 		Port:    s.Port,                                        // 服务端口
 		Address: s.IP,                                          // 服务 IP
 		Check: &api.AgentServiceCheck{ // 健康检查
-			Interval:                       interval.String(),                                // 健康检查间隔
-			HTTP:                           fmt.Sprintf("http://%s:%d/health", s.IP, s.Port), // 健康检查地址
-			DeregisterCriticalServiceAfter: deregister.String(),                              // 注销时间，相当于过期时间
+			Interval:                       interval.String(),                              // 健康检查间隔
+			HTTP:                           fmt.Sprintf("http://%s:%d/health", s.IP, 8001), // 健康检查地址
+			DeregisterCriticalServiceAfter: deregister.String(),                            // 注销时间，相当于过期时间
 		},
 	}
 
