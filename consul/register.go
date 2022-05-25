@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/consul/api"
 )
 
-const consulAddress = "127.0.0.1:8500"
+const consulAddress = "consul:8500"
 
 type ConsulService struct {
 	IP   string

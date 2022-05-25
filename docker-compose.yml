@@ -1,0 +1,35 @@
+version: "3"
+networks:
+  default:
+    driver: bridge
+services:
+  consul:
+    image: consul
+    container_name: consul
+    restart: always
+    networks:
+      - default
+    ports:
+      - "8500:8500"
+    command: "agent -server -bootstrap -ui -node=1 -client='0.0.0.0'"
+
+  sample1:
+    image: sample:v1
+    networks:
+      - default
+    depends_on:
+      - consul
+  
+  sample2:
+    image: sample:v1
+    networks:
+      - default
+    depends_on:
+      - consul
+
+  sample3:
+    image: sample:v1
+    networks:
+      - default
+    depends_on:
+      - consul
