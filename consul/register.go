@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/consul/api"
 )
 
-const consulAddress = "consul:8500"
+const ConsulAddress = "consul:8500"
 
 type ConsulService struct {
 	IP   string
@@ -18,7 +18,7 @@ type ConsulService struct {
 
 func RegitserService(s *ConsulService) {
 	consulConfig := api.DefaultConfig()
-	consulConfig.Address = consulAddress
+	consulConfig.Address = ConsulAddress
 
 	client, err := api.NewClient(consulConfig)
 	if err != nil {
@@ -43,7 +43,7 @@ func RegitserService(s *ConsulService) {
 		},
 	}
 
-	fmt.Printf("service %v registing to %v\n", s.Name, consulAddress)
+	fmt.Printf("service %v registing to %v\n", s.Name, ConsulAddress)
 	if err := agent.ServiceRegister(reg); err != nil {
 		fmt.Printf("ServiceRegister error: %v", err)
 		return
