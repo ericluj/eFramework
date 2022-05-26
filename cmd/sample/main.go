@@ -8,6 +8,7 @@ import (
 
 	"eFramework/common"
 	"eFramework/consul" // grpc使用consul做服务发现init
+	"eFramework/jaeger"
 	"eFramework/rpc/sample"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -46,7 +47,14 @@ func listen(port int) (ln net.Listener, err error) {
 }
 
 func initGrpcServer(ln net.Listener) {
-	server := grpc.NewServer()
+	// jaeger
+	tracer, closer, err := jaeger.NewJaegerTracer(serviceName)
+	defer closer.Close()
+	if err != nil {
+		fmt.Printf("NewJaegerTracer err: %v", err)
+	}
+
+	server := grpc.NewServer(grpc.UnaryInterceptor(jaeger.ServerInterceptor(tracer)))
 	sample.RegisterSampleServiceServer(server, &SampleService{})
 
 	// 注册到consul

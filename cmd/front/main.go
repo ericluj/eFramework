@@ -9,6 +9,7 @@ import (
 
 	"eFramework/common"
 	"eFramework/consul" // grpc使用consul做服务发现init
+	"eFramework/jaeger"
 	"eFramework/rpc/front"
 	"eFramework/rpc/sample"
 
@@ -48,7 +49,14 @@ func listen(port int) (ln net.Listener, err error) {
 }
 
 func initGrpcServer(ln net.Listener) {
-	server := grpc.NewServer()
+	// jaeger
+	tracer, closer, err := jaeger.NewJaegerTracer(serviceName)
+	defer closer.Close()
+	if err != nil {
+		fmt.Printf("NewJaegerTracer err: %v", err)
+	}
+
+	server := grpc.NewServer(grpc.UnaryInterceptor(jaeger.ServerInterceptor(tracer)))
 	front.RegisterFrontServiceServer(server, &FrontService{})
 
 	// 注册到consul

@@ -9,6 +9,8 @@ import (
 
 const ConsulAddress = "consul:8500"
 
+// const ConsulAddress = "127.0.0.1:8500"
+
 type ConsulService struct {
 	IP   string
 	Port int
