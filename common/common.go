@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"eFramework/consul"
+	"eFramework/jaeger"
 	"fmt"
 	"net"
 
@@ -26,7 +27,20 @@ func GetLocalIP() string {
 }
 
 func NewClientConn(serviceName string) (grpc.ClientConnInterface, error) {
+	// jaeger
+	tracer, closer, err := jaeger.NewJaegerTracer(serviceName)
+	defer closer.Close()
+	if err != nil {
+		fmt.Printf("NewJaegerTracer err: %v", err)
+	}
+
 	target := fmt.Sprintf("consul://%s/%s", consul.ConsulAddress, serviceName)
-	conn, err := grpc.DialContext(context.Background(), target, grpc.WithInsecure(), grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`))
+	conn, err := grpc.DialContext(
+		context.Background(),
+		target,
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		grpc.WithUnaryInterceptor(jaeger.ClientInterceptor(tracer)),
+	)
 	return conn, err
 }
