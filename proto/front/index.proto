@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package front;
+option go_package = "/front";
+
+import "google/api/annotations.proto";
+
+service FrontService {
+    rpc Health(HealthRequest) returns (HealthResponse) {
+        option (google.api.http) = {
+            get: "/health"
+        };
+    }
+    rpc Sample(SampleRequest) returns (SampleResponse) {
+        option (google.api.http) = {
+            post: "/sample"
+            body: "*"
+        };
+    }
+}
+
+message HealthRequest {
+}
+
+message HealthResponse {
+    string status = 1;
+}
+
+message SampleRequest {
+    string request = 1;
+}
+
+message SampleResponse {
+    string response = 1;
+}

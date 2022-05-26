@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 
+	"eFramework/common"
 	"eFramework/consul" // grpc使用consul做服务发现init
 	"eFramework/rpc/sample"
 
@@ -52,7 +53,7 @@ func initGrpcServer(ln net.Listener) {
 	consul.RegitserService(&consul.ConsulService{
 		Name: serviceName,
 		Tag:  []string{serviceName},
-		IP:   GetLocalIP(),
+		IP:   common.GetLocalIP(),
 		Port: port,
 	})
 
@@ -84,20 +85,4 @@ func (s *SampleService) Health(ctx context.Context, in *sample.HealthRequest) (*
 func (s *SampleService) Search(ctx context.Context, in *sample.SearchRequest) (*sample.SearchResponse, error) {
 	fmt.Println("grpc search")
 	return &sample.SearchResponse{Response: "haha"}, nil
-}
-
-func GetLocalIP() string {
-	addrs, err := net.InterfaceAddrs()
-	if err != nil {
-		return ""
-	}
-	for _, address := range addrs {
-		// check the address type and if it is not a loopback the display it
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				return ipnet.IP.String()
-			}
-		}
-	}
-	return ""
 }

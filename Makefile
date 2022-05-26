@@ -1,9 +1,7 @@
-run:
+mod:
 	go mod tidy
 	go mod vendor
-	go run main.go
 
-# 编译proto生成pb.go文件
 gen:
 	rm -rf rpc/*
 	protoc -I . \
@@ -16,10 +14,20 @@ gen:
     	./proto/*/*.proto
 
 image:
+	docker build -t front:v1 -f deploy/front/Dockerfile .
 	docker build -t sample:v1 -f deploy/sample/Dockerfile .
 
 up:
 	docker-compose up -d
 
+stop:
+	docker-compose stop
+
 recreate:
 	docker-compose up -d --force-recreate
+
+sample:
+	go run cmd/sample/main.go
+
+front:
+	go run cmd/front/main.go
