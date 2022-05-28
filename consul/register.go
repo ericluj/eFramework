@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/consul/api"
+	log "github.com/sirupsen/logrus"
 )
 
 const ConsulAddress = "consul:8500"
@@ -24,7 +25,7 @@ func RegitserService(s *ConsulService) {
 
 	client, err := api.NewClient(consulConfig)
 	if err != nil {
-		fmt.Printf("NewClient error: %v", err)
+		log.Infof("NewClient error: %v", err)
 		return
 	}
 
@@ -45,9 +46,9 @@ func RegitserService(s *ConsulService) {
 		},
 	}
 
-	fmt.Printf("service %v registing to %v\n", s.Name, ConsulAddress)
+	log.Infof("service %v registing to %v\n", s.Name, ConsulAddress)
 	if err := agent.ServiceRegister(reg); err != nil {
-		fmt.Printf("ServiceRegister error: %v", err)
+		log.Infof("ServiceRegister error: %v", err)
 		return
 	}
 

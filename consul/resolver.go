@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/hashicorp/consul/api"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/resolver"
 )
 
@@ -63,14 +64,14 @@ func (cr *consulResolver) watcher() {
 
 	client, err := api.NewClient(config)
 	if err != nil {
-		fmt.Printf("consul client error: %v", err)
+		log.Infof("consul client error: %v", err)
 		return
 	}
 
 	for {
 		services, metainfo, err := client.Health().Service(cr.name, cr.name, true, &api.QueryOptions{WaitIndex: cr.lastIndex})
 		if err != nil {
-			fmt.Printf("service from consul errror: %v", err)
+			log.Infof("service from consul errror: %v", err)
 		}
 		cr.lastIndex = metainfo.LastIndex
 

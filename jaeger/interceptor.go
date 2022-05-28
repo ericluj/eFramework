@@ -2,10 +2,10 @@ package jaeger
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/metadata"
@@ -43,14 +43,14 @@ func ClientInterceptor(tracer opentracing.Tracer) grpc.UnaryClientInterceptor {
 		)
 
 		if err != nil {
-			fmt.Printf("inject span error :%v", err.Error())
+			log.Infof("inject span error :%v", err.Error())
 		}
 
 		newCtx := metadata.NewOutgoingContext(ctx, md)
 		err = invoker(newCtx, method, request, reply, cc, opts...)
 
 		if err != nil {
-			fmt.Printf("call error : %v", err.Error())
+			log.Infof("call error : %v", err.Error())
 		}
 		return err
 	}

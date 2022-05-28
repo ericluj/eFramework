@@ -12,6 +12,7 @@ import (
 	"eFramework/rpc/sample"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -22,7 +23,7 @@ const (
 )
 
 func main() {
-	fmt.Println("start framework")
+	log.Infof("start framework")
 
 	ln, err := listen(port)
 	if err != nil {
@@ -51,7 +52,7 @@ func initGrpcServer(ln net.Listener) {
 	tracer, closer, err := jaeger.NewJaegerTracer(serviceName)
 	defer closer.Close()
 	if err != nil {
-		fmt.Printf("NewJaegerTracer err: %v", err)
+		log.Infof("NewJaegerTracer err: %v", err)
 	}
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(jaeger.ServerInterceptor(tracer)))
@@ -74,7 +75,7 @@ func initHttpServer() {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	err := sample.RegisterSampleServiceHandlerFromEndpoint(context.Background(), mux, grpcServerEndpoint, opts)
 	if err != nil {
-		fmt.Printf("http server error: %v", err)
+		log.Infof("http server error: %v", err)
 		return
 	}
 
@@ -86,11 +87,11 @@ type SampleService struct {
 }
 
 func (s *SampleService) Health(ctx context.Context, in *sample.HealthRequest) (*sample.HealthResponse, error) {
-	fmt.Println("grpc health")
+	log.Infof("grpc health")
 	return &sample.HealthResponse{Status: "ok"}, nil
 }
 
 func (s *SampleService) Search(ctx context.Context, in *sample.SearchRequest) (*sample.SearchResponse, error) {
-	fmt.Println("grpc search")
+	log.Infof("grpc search")
 	return &sample.SearchResponse{Response: "haha"}, nil
 }

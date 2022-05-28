@@ -6,6 +6,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.2
 	github.com/hashicorp/consul/api v1.12.0
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd
 	google.golang.org/grpc v1.46.2

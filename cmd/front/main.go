@@ -14,6 +14,7 @@ import (
 	"eFramework/rpc/sample"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -24,7 +25,7 @@ const (
 )
 
 func main() {
-	fmt.Println("start framework")
+	log.Infof("start framework")
 
 	ln, err := listen(port)
 	if err != nil {
@@ -53,7 +54,7 @@ func initGrpcServer(ln net.Listener) {
 	tracer, closer, err := jaeger.NewJaegerTracer(serviceName)
 	defer closer.Close()
 	if err != nil {
-		fmt.Printf("NewJaegerTracer err: %v", err)
+		log.Infof("NewJaegerTracer err: %v", err)
 	}
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(jaeger.ServerInterceptor(tracer)))
@@ -76,7 +77,7 @@ func initHttpServer() {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	err := front.RegisterFrontServiceHandlerFromEndpoint(context.Background(), mux, grpcServerEndpoint, opts)
 	if err != nil {
-		fmt.Printf("http server error: %v", err)
+		log.Infof("http server error: %v", err)
 		return
 	}
 
@@ -88,12 +89,12 @@ type FrontService struct {
 }
 
 func (s *FrontService) Health(ctx context.Context, in *front.HealthRequest) (*front.HealthResponse, error) {
-	fmt.Println("grpc health")
+	log.Infof("grpc health")
 	return &front.HealthResponse{Status: "ok"}, nil
 }
 
 func (s *FrontService) Sample(ctx context.Context, in *front.SampleRequest) (*front.SampleResponse, error) {
-	fmt.Println("grpc sample")
+	log.Infof("grpc sample")
 	res := &front.SampleResponse{}
 	data, err := GetSampleClient().Search(ctx, &sample.SearchRequest{Request: "front发出"})
 	if err != nil {
