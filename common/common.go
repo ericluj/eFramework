@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
@@ -31,7 +32,7 @@ func NewClientConn(serviceName string) (grpc.ClientConnInterface, error) {
 	tracer, closer, err := jaeger.NewJaegerTracer(serviceName)
 	defer closer.Close()
 	if err != nil {
-		fmt.Printf("NewJaegerTracer err: %v", err)
+		log.Infof("NewJaegerTracer err: %v", err)
 	}
 
 	target := fmt.Sprintf("consul://%s/%s", consul.ConsulAddress, serviceName)
