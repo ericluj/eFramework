@@ -2,11 +2,11 @@ package common
 
 import (
 	"context"
-	"eFramework/consul"
-	"eFramework/jaeger"
 	"fmt"
 	"net"
 
+	"github.com/ericluj/eFramework/consul"
+	"github.com/ericluj/eFramework/jaeger"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )

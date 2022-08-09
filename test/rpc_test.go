@@ -4,8 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"eFramework/rpc/sample"
-
+	"github.com/ericluj/eFramework/rpc/sample"
 	"google.golang.org/grpc"
 )
 

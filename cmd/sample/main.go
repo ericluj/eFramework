@@ -6,11 +6,10 @@ import (
 	"net"
 	"net/http"
 
-	"eFramework/common"
-	"eFramework/consul" // grpc使用consul做服务发现init
-	"eFramework/jaeger"
-	"eFramework/rpc/sample"
-
+	"github.com/ericluj/eFramework/common"
+	"github.com/ericluj/eFramework/consul" // grpc使用consul做服务发现init
+	"github.com/ericluj/eFramework/jaeger"
+	"github.com/ericluj/eFramework/rpc/sample"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -66,7 +65,7 @@ func initGrpcServer(ln net.Listener) {
 		Port: port,
 	})
 
-	server.Serve(ln)
+	_ = server.Serve(ln)
 }
 
 func initHttpServer() {
@@ -79,7 +78,7 @@ func initHttpServer() {
 		return
 	}
 
-	http.ListenAndServe(":8001", mux)
+	_ = http.ListenAndServe(":8001", mux)
 }
 
 type SampleService struct {

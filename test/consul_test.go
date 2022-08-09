@@ -5,9 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"eFramework/consul"
-	"eFramework/rpc/sample"
-
+	"github.com/ericluj/eFramework/consul"
+	"github.com/ericluj/eFramework/rpc/sample"
 	"google.golang.org/grpc"
 )
 

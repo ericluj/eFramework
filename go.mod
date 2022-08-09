@@ -1,4 +1,4 @@
-module eFramework
+module github.com/ericluj/eFramework
 
 go 1.18
 
