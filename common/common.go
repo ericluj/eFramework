@@ -7,7 +7,7 @@ import (
 
 	"github.com/ericluj/eFramework/consul"
 	"github.com/ericluj/eFramework/jaeger"
-	log "github.com/sirupsen/logrus"
+	log "github.com/ericluj/elog"
 	"google.golang.org/grpc"
 )
 

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
+	log "github.com/ericluj/elog"
 	"github.com/hashicorp/consul/api"
-	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/resolver"
 )
 

@@ -3,10 +3,10 @@ module github.com/ericluj/eFramework
 go 1.18
 
 require (
+	github.com/ericluj/elog v1.2.4
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.2
 	github.com/hashicorp/consul/api v1.12.0
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/sirupsen/logrus v1.8.1
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	google.golang.org/genproto v0.0.0-20220519153652-3a47de7e79bd
 	google.golang.org/grpc v1.46.2
@@ -29,9 +29,10 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )

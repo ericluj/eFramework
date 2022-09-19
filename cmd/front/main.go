@@ -12,8 +12,8 @@ import (
 	"github.com/ericluj/eFramework/jaeger"
 	"github.com/ericluj/eFramework/rpc/front"
 	"github.com/ericluj/eFramework/rpc/sample"
+	log "github.com/ericluj/elog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

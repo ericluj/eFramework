@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	log "github.com/ericluj/elog"
 	"github.com/hashicorp/consul/api"
-	log "github.com/sirupsen/logrus"
 )
 
 const ConsulAddress = "consul:8500"
